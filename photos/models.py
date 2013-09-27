@@ -31,20 +31,8 @@ class Image(models.Model):
     
     id = UuidField(primary_key=True)
     title = models.CharField(max_length=128)
-    caption = models.CharField(max_length=4096)
+    caption = models.CharField(max_length=4096, blank=True)
+    tags = models.ManyToManyField(Tag, related_name="images")
 
     def __str__(self):
-        return "Image({})".format(self.title)        
-
-
-#Membership table for images to tags
-class TaggedImage(models.Model):
-    
-    id = models.AutoField(primary_key=True)
-    image = models.ForeignKey(Image)
-    tag = models.ForeignKey(Tag)
-
-    def __str__(self):
-        return "TaggedImaged({} to {})".format(str(self.image),
-                                               str(self.tag))
-
+        return "Image({})".format(self.title)
