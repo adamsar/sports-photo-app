@@ -10,3 +10,4 @@ lib/
 
 #Compiled files
 *.pyc
+*.egg-info

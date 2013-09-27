@@ -1,3 +1,50 @@
 from django.db import models
+import uuid
 
-# Create your models here.
+def UuidField(primary_key=False):
+    """
+    Denotes a CharField that is a Uuid field in the database.
+    primary_key - this key is the primary key in the table it is present in.
+    """
+
+    options = {
+        "primary_key": primary_key,
+        "default": lambda: str(uuid.uuid4()),
+        "max_length": 36
+    }
+    return models.CharField(**options)
+    
+
+#You basic way of associating information in the database
+class Tag(models.Model):
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=128)
+    associated_id = UuidField()
+
+    def __str__(self):
+        return "Tag({}) with associated Id {}".format(self.name,
+                                                      self.associated_id)
+
+#Any image that has been ingested and is associable with a tag
+class Image(models.Model):
+    
+    id = UuidField(primary_key=True)
+    title = models.CharField(max_length=128)
+    caption = models.CharField(max_length=4096)
+
+    def __str__(self):
+        return "Image({})".format(self.title)        
+
+
+#Membership table for images to tags
+class TaggedImage(models.Model):
+    
+    id = models.AutoField(primary_key=True)
+    image = models.ForeignKey(Image)
+    tag = models.ForeignKey(Tag)
+
+    def __str__(self):
+        return "TaggedImaged({} to {})".format(str(self.image),
+                                               str(self.tag))
+
