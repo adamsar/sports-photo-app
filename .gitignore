@@ -1,0 +1,12 @@
+#Virtualenv paths
+bin/
+include/
+lib/
+.Python
+
+#Emacs generated files
+*~
+*#
+
+#Compiled files
+*.pyc
