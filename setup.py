@@ -11,7 +11,9 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 requires = [
     'django',
-    'psycopg2'
+    'psycopg2',
+    'boto',
+    'PIL'
     ]
 setup(
     name='photos',
