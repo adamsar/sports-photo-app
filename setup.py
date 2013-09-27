@@ -13,7 +13,8 @@ requires = [
     'django',
     'psycopg2',
     'boto',
-    'PIL'
+    'PIL',
+    'oauth2'
     ]
 setup(
     name='photos',
