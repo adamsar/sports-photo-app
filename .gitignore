@@ -8,7 +8,7 @@ share
 #Emacs generated files
 *~
 *#
-
+*.#*
 #Compiled files
 *.pyc
 *.egg-info

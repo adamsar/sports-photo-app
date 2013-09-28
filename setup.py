@@ -14,7 +14,8 @@ requires = [
     'psycopg2',
     'boto',
     'PIL',
-    'oauth2'
+    'oauth2',
+    'passlib'
     ]
 setup(
     name='photos',

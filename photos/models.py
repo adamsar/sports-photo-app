@@ -33,6 +33,7 @@ class Image(models.Model):
     title = models.CharField(max_length=128)
     caption = models.CharField(max_length=4096, blank=True)
     tags = models.ManyToManyField(Tag, related_name="images")
+    salted_hash = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
         return "Image({})".format(self.title)
