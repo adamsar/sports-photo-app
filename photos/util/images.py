@@ -1,7 +1,13 @@
 """
 Image processing functions and tasks
 """
+
+from cStringIO import StringIO
+
+import urllib2
 import Image
+
+PREVIEW_URL = "http://thumb.usatodaysportsimages.com/image/thumb/{}-{}nw/{}.jpg"
 
 def half_of(a, b):
     return (a - b) / 2
@@ -60,3 +66,9 @@ def resize_and_crop(img, size=[], crop_type='middle'):
         return vertical_crop()
     else:
         return img.resize(size, Image.ANTIALIAS)
+
+def read_image(url):
+    """Reads an image into PIL from a specified URL"""
+    f = urllib2.urlopen(url)
+    img = StringIO(f.read())
+    return Image.open(img)

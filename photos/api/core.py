@@ -1,31 +1,32 @@
-"""
-Image API interaction library
-"""
+from photoapp import settings
+from photos.api import oauth
+from photos.api.results import ImageResults
+from photos.util.decorators import generative
 
-from photos.util import urls
-from photos.util import oauth
-
-import settings
-import simplejson
-
+import json
 import urllib
 import urllib2
-import StringIO
-import logging
 
+import logging
 log = logging.getLogger(__name__)
 
+API_ENDPOINT = "http://www.usatodaysportsimages.com/api/searchAPI/"
+
 class BlankRequest(object):
+    """
+    An unformed request that will error out when
+    trying to deal with it
+    """
 
     def to_url(__self__):
         raise TypeError("Request not explicitly set yet")
-        
+
+
 
 class ImageApi(object):
-
     
     def __init__(self, key=settings.SPORTS_API['key'],
-                 secret=settings.SPORTS_API['key']):
+                 secret=settings.SPORTS_API['secret']):
         """
         Bootstrap ourselves with a request
         """
@@ -34,8 +35,9 @@ class ImageApi(object):
         self.request = BlankRequest()
 
 
-    def request(self, params={}):
-        self.request = oauth.build_request(urls.API_ENDPOINT,
+    @generative
+    def make_request(self, params={}):
+        self.request = oauth.build_request(API_ENDPOINT,
                                            self.key,
                                            self.secret,
                                            params=params)
@@ -43,11 +45,17 @@ class ImageApi(object):
     def list(self):
         url = self.request.to_url()
         log.debug("Calling out to {}".format(url))
-        response = urllib.urlopen(url)
-        log.debug("Results: {}".format(response))        
-        results = simplejson.loads(response)
-        return results
+        response = urllib.urlopen(url).read()
+        log.debug("Results: {}".format(response))
+        results = json.loads(response)        
+        return ImageResults(results)
 
+    def one(self):
+        """
+        Returns the first result from the API.
+        """
+        return self.list().items[0]
+    
         
     def download(self):
         url = self.request.to_url()
@@ -55,4 +63,3 @@ class ImageApi(object):
         raw_image = urllib2.urlopen(url).read()
         log.debug("Downloaded")
         return raw_image
-        

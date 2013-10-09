@@ -1,4 +1,3 @@
-from photos.util import urls
 import oauth2
 import time
 
@@ -6,10 +5,11 @@ import logging
 log = logging.getLogger(__name__)
 
 SIGNATURE_METHOD = oauth2.SignatureMethod_HMAC_SHA1()
+OAUTH_VERSION = '1.0'
 
 def blank_request_params():
     return {
-        'oauth_version': urls.OAUTH_VERSION,
+        'oauth_version': OAUTH_VERSION,
         'oauth_nonce': oauth2.generate_nonce(),
         'oauth_timestamp': int(time.time())
     }

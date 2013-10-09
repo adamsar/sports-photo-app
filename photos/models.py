@@ -15,17 +15,19 @@ def UuidField(primary_key=False):
     return models.CharField(**options)
     
 
-#You basic way of associating information in the database
+#Basic way of associating information in the database
 class Tag(models.Model):
     
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
-    associated_id = UuidField()
+    category = models.CharField(max_length=128, blank=True)
+    associated_id = UuidField()    
 
     def __str__(self):
         return "Tag({}) with associated Id {}".format(self.name,
                                                       self.associated_id)
 
+        
 #Any image that has been ingested and is associable with a tag
 class Image(models.Model):
     
@@ -33,7 +35,6 @@ class Image(models.Model):
     title = models.CharField(max_length=128)
     caption = models.CharField(max_length=4096, blank=True)
     tags = models.ManyToManyField(Tag, related_name="images")
-    salted_hash = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
         return "Image({})".format(self.title)
