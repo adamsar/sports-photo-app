@@ -1,4 +1,6 @@
 from django.db import models
+from photos.util import validation
+from django.core.exceptions import ValidationError
 import uuid
 
 def UuidField(primary_key=False):
@@ -21,7 +23,7 @@ class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
     category = models.CharField(max_length=128, blank=True)
-    associated_id = UuidField()    
+    associated_id = UuidField()
 
     def __str__(self):
         return "Tag({}) with associated Id {}".format(self.name,
@@ -29,12 +31,19 @@ class Tag(models.Model):
 
         
 #Any image that has been ingested and is associable with a tag
-class Image(models.Model):
+class AppImage(models.Model):
     
-    id = UuidField(primary_key=True)
-    title = models.CharField(max_length=128)
+    id = models.CharField(primary_key=True, max_length=32)
+    title = models.CharField(max_length=128, null=False, blank=False)
     caption = models.CharField(max_length=4096, blank=True)
     tags = models.ManyToManyField(Tag, related_name="images")
+    created_on = models.DateTimeField(null=False)
+
+    def clean(self):
+        if validation.blank_or_none(self.id):
+            raise ValidationError("Need a non-blank id")
+        if validation.blank_or_none(self.title):
+            raise ValidationError("need a non-blank title")
 
     def __str__(self):
         return "Image({})".format(self.title)
