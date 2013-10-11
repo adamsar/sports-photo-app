@@ -12,3 +12,6 @@ share
 #Compiled files
 *.pyc
 *.egg-info
+
+#Outliers
+test.py

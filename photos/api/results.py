@@ -10,18 +10,21 @@ class ImageResult(object):
         Gets an attribute from the the result using the
         specified formatted function to process it
         """
-        return formatter(self.data.get(attr))    
+        return formatter(self.data.get(attr))
+
+    def __str__(self):
+        return "ImageResult({})".format(self.get(keys.ID))
 
 class ImageResults(object):
 
     def __init__(self, raw_results):
         self.results = raw_results[keys.RESULTS_KEY]
         self.total = self.results[keys.TOTAL_KEY]
-        self.items = [r.pop() for r in self.results[keys.ITEMS_KEY]]
+        self.items = [ImageResult(r.pop()) for r in self.results[keys.ITEMS_KEY]]
 
     def __iter__(self):
         for item in self.items:
-            yield item
+            yield item            
 
     def __len__(self):
         return len(self.items)

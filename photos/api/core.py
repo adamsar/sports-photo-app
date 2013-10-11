@@ -22,7 +22,6 @@ class BlankRequest(object):
         raise TypeError("Request not explicitly set yet")
 
 
-
 class ImageApi(object):
     
     def __init__(self, key=settings.SPORTS_API['key'],
@@ -34,6 +33,13 @@ class ImageApi(object):
         self.secret = secret
         self.request = BlankRequest()
 
+    def _call_api(self):
+        url = self.request.to_url()
+        log.debug("Calling out to {}".format(url))
+        response = urllib.urlopen(url).read()
+        log.debug("Results: {}".format(response))
+        return response        
+        
 
     @generative
     def make_request(self, params={}):
@@ -42,12 +48,8 @@ class ImageApi(object):
                                            self.secret,
                                            params=params)
 
-    def list(self):
-        url = self.request.to_url()
-        log.debug("Calling out to {}".format(url))
-        response = urllib.urlopen(url).read()
-        log.debug("Results: {}".format(response))
-        results = json.loads(response)        
+    def list(self):        
+        results = json.loads(self._call_api())        
         return ImageResults(results)
 
     def one(self):

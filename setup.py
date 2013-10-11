@@ -11,6 +11,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 requires = [
     'django',
+    'django-celery',
     'psycopg2',
     'boto',
     'PIL',
