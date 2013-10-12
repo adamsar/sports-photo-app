@@ -20,7 +20,7 @@ def consume_image(image):
     Takes a photos.api.results.ImageResult and
     stores it in the database
     """
-    img = AppImage.objects.get_or_create(
+    img, successful = AppImage.objects.get_or_create(
         id=image.get(keys.ID),
         title=image.get(keys.HEADLINE),
         caption=image.get(keys.CAPTION),

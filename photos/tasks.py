@@ -30,7 +30,7 @@ def check_terms(terms):
     """
     log.debug("Checking for {}".format(str(terms)))
     api = ImageApi()
-    images = api.make_request(params=requests.photo_reel(terms, limit=25))
+    images = api.make_request(params=requests.photo_reel(terms, limit=25)).list()
     map(do_ingest.delay, filter(lambda image: can_ingest(image), images.items))
 
 @task

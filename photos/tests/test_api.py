@@ -38,3 +38,4 @@ class APITestCase(TestCase):
                 helper.get_preview_url(result.get(keys.ID), size[0], size[1])
                 )
             expect_size(img, size[0], size[1])        
+
